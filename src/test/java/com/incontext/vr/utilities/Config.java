@@ -1,4 +1,4 @@
-package utilities;
+package com.incontext.vr.utilities;
 
 
 import java.io.FileInputStream;

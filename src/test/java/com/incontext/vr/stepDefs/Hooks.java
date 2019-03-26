@@ -1,10 +1,10 @@
-package stepDefs;
+package com.incontext.vr.stepDefs;
 
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import utilities.Driver;
+import com.incontext.vr.utilities.Driver;
 
 public class Hooks {
 

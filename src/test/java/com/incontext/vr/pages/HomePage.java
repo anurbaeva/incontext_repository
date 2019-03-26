@@ -1,10 +1,10 @@
-package pages;
+package com.incontext.vr.pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import utilities.Driver;
+import com.incontext.vr.utilities.Driver;
 
 public class HomePage {
 
@@ -37,11 +37,8 @@ public class HomePage {
     @FindBy (xpath = "//div[@class='st-autocomplete-results']//div[@class='st-query-present']/a[1]")
     public WebElement firstAutoSuggestedResult;
 
-//    @FindBy (xpath = "//section[contains(@class,'st-ui-content st-search-results')]//a[1]")
-//    public WebElement FirstAutoSuggestedResult1;
-
-    @FindBy (xpath = "//section[@class='st-ui-content st-search-results']//a[@data-st-result-doc-id='5a7b380a07552350689a85c7']")
-    public WebElement AutoSuggestedMixedReality;
+    @FindBy (xpath = "(//section[@class='st-ui-content st-search-results']//a//em[text()='Mixed'])[1]")
+    public WebElement autoSuggestedMixedReality;
 
 
 

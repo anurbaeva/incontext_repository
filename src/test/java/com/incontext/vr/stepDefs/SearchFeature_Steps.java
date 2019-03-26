@@ -1,30 +1,32 @@
-package stepDefs;
+package com.incontext.vr.stepDefs;
 
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.junit.Assert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.HomePage;
-import utilities.Config;
-import utilities.Driver;
+import com.incontext.vr.pages.HomePage;
+import com.incontext.vr.utilities.Config;
+import com.incontext.vr.utilities.Driver;
 
 import java.util.ArrayList;
+
+import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 
 public class SearchFeature_Steps {
 
     HomePage homePage = new HomePage();
     WebDriver driver = Driver.getDriver();
-    Actions actions = new Actions(driver);
-    String link ;
+    // Actions actions = new Actions(driver);
+    String link;
     ArrayList<String> tabs;
+    JavascriptExecutor js = (JavascriptExecutor) driver;
+    WebDriverWait webDriverWait = new WebDriverWait(driver, 6);
 
     @Given("user on the main page")
     public void user_on_the_main_page() {
@@ -37,14 +39,13 @@ public class SearchFeature_Steps {
     @Then("user should see confirmation cookie pop up window")
     public void user_should_see_confirmation_cookie_pop_up_window() {
 
-        Assert.assertTrue(homePage.cookiePopUp.isDisplayed());
+        assertTrue(homePage.cookiePopUp.isDisplayed());
 
     }
 
     @Then("user should decline it")
     public void user_should_decline_it() {
 
-        Assert.assertTrue(homePage.cookiePopUp.isDisplayed());
         homePage.cookieDeclineButton.click();
 
     }
@@ -56,27 +57,25 @@ public class SearchFeature_Steps {
     }
 
     @When("user search for \\\"([^\\\"]*)\\\"")
-    public void user_search_for(String string) {
+    public void user_search_for(String userInput) {
 
-        homePage.searchField.sendKeys("Challenge");
-
+        homePage.searchField.sendKeys(userInput);
 
     }
 
     @When("user should see auto suggested result items")
     public void user_should_see_auto_suggested_result_items() {
-        WebDriverWait webDriverWait = new WebDriverWait(driver, 6);
-        webDriverWait.until(ExpectedConditions.visibilityOf(homePage.firstAutoSuggestedResult));
 
+
+        webDriverWait.until(visibilityOf(homePage.firstAutoSuggestedResult));
         link = homePage.firstAutoSuggestedResult.getAttribute("href");
-
 
     }
 
     @Then("user should be able to open first auto suggested item in the new tab")
     public void user_should_be_able_to_open_first_auto_suggested_item_in_the_new_tab() throws InterruptedException {
 
-       //actions.contextClick(homePage.firstAutoSuggestedResult).perform();
+        //actions.contextClick(homePage.firstAutoSuggestedResult).perform();
         //actions.moveToElement(homePage.firstAutoSuggestedResult).sendKeys("t" + Keys.COMMAND);
         //homePage.firstAutoSuggestedResult.sendKeys(Keys.COMMAND + "t");
         //homePage.firstAutoSuggestedResult.sendKeys(Keys.chord(Keys.COMMAND, "t"));
@@ -88,9 +87,9 @@ public class SearchFeature_Steps {
 //        String link = homePage.firstAutoSuggestedResult.getAttribute("href");
 //        driver.findElement(By.linkText(link)).sendKeys(select);
 
-      //   actions.keyDown(Keys.SHIFT).click(homePage.firstAutoSuggestedResult).keyUp(Keys.SHIFT).build().perform();
+        //   actions.keyDown(Keys.SHIFT).click(homePage.firstAutoSuggestedResult).keyUp(Keys.SHIFT).build().perform();
 
-        JavascriptExecutor js = (JavascriptExecutor)driver;
+
         js.executeScript("window.open()");
         tabs = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
@@ -98,25 +97,22 @@ public class SearchFeature_Steps {
 
     }
 
-    @Then("user should able to go back to the first tab")
-    public void user_should_able_to_go_back_to_the_first_tab() throws InterruptedException {
+    @Then("user should be able to go back to the first tab")
+    public void user_should_able_to_go_back_to_the_first_tab() {
 
-        //Thread.sleep(3000);
         driver.switchTo().window(tabs.get(0));
     }
 
     @Then("user should be able to see results after pressing enter")
-    public void user_should_be_able_to_see_results_after_pressing_enter() throws InterruptedException {
+    public void user_should_be_able_to_see_results_after_pressing_enter() {
 
-        //Thread.sleep(3000);
         homePage.searchField.sendKeys(Keys.ENTER);
     }
 
     @Then("user should open first result in the new tab")
-    public void user_should_open_first_result_in_the_new_tab() throws InterruptedException {
+    public void user_should_open_first_result_in_the_new_tab() {
 
-        //Thread.sleep(3000);
-        JavascriptExecutor js = (JavascriptExecutor)driver;
+
         js.executeScript("window.open()");
         tabs = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(2));
@@ -125,36 +121,32 @@ public class SearchFeature_Steps {
 
 
     @Then("user should able to go back to the parent tab")
-    public void user_should_able_to_go_back_to_the_parent_tab() throws InterruptedException {
+    public void user_should_able_to_go_back_to_the_parent_tab() {
 
-       // Thread.sleep(3000);
         driver.switchTo().window(tabs.get(0));
 
     }
 
 
     @Then("user searches for \\\"([^\\\"]*)\\\"")
-    public void user_searches_for(String string) {
-
-        homePage.searchField.clear();
-        homePage.searchField.sendKeys("mixed reality" + Keys.ENTER);
+    public void user_searches_for(String userInput) throws InterruptedException {
+        webDriverWait.until(visibilityOf(homePage.searchField)).clear();
+        homePage.searchField.sendKeys(userInput);
+        homePage.searchField.sendKeys(Keys.ENTER);
 
     }
 
     @Then("user should open first item in the current tab")
-    public void user_should_open_first_item_in_the_current_tab() throws InterruptedException {
-
-        homePage.AutoSuggestedMixedReality.click();
-
+    public void user_should_open_first_item_in_the_current_tab() {
+        homePage.autoSuggestedMixedReality.click();
     }
 
-    @Then("user verify the title of the page")
-    public void user_verify_the_title_of_the_page() {
+    @Then("user verify the title of the page is \\\"([^\\\"]*)\\\"")
+    public void user_verify_the_title_of_the_page(String title) {
 
-       Assert.assertTrue(driver.getTitle().contains("Mixed Reality"));
+        assertTrue(driver.getTitle().contains(title));
 
     }
-
-
 
 }
+
